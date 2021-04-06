@@ -1,7 +1,7 @@
 ## Graph Solver
 Web interface for solving different problems on graphs.
 
-*temporary broken due to disabling access to postres database*
+*temporary broken due to disabling access to postgresql database*
 
 #### Features
 
