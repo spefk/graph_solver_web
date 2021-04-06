@@ -1,5 +1,5 @@
 ## Graph Solver
-Web interface for solving different problems on graphs.
+Web interface for solving different problems on graphs. (training project)
 
 *temporary broken due to disabling access to postgresql database*
 
