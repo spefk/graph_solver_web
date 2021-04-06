@@ -1,0 +1,205 @@
+{% extends "algorithm_page.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block algorithm_name %}
+    <h1 class="text-center">
+      Traveling Salesman Problem
+    </h1>
+{% endblock algorithm_name %}
+
+{% block algorithm_description%}
+    <p><b>Задача коммивояжёра</b> (или TSP от англ. Travelling salesman problem) — одна из самых известных задач комбинаторной оптимизации, заключающаяся в поиске самого выгодного маршрута, проходящего через указанные города хотя бы по одному разу с последующим возвратом в исходный город.</p>
+    <p>В условиях задачи указываются критерий выгодности маршрута (кратчайший, самый дешёвый, совокупный критерий и тому подобное) и соответствующие матрицы расстояний, стоимости и тому подобного. Как правило, указывается, что маршрут должен проходить через каждый город только один раз — в таком случае выбор осуществляется среди гамильтоновых циклов.</p>
+    <p>Существует несколько частных случаев общей постановки задачи, в частности, геометрическая задача коммивояжёра (также называемая планарной или евклидовой, когда матрица расстояний отражает расстояния между точками на плоскости), метрическая задача коммивояжёра (когда на матрице стоимостей выполняется неравенство треугольника), симметричная и асимметричная задачи коммивояжёра. Также существует обобщение задачи, так называемая обобщённая задача коммивояжёра.</p>
+    <p> </p>
+    <h4 class="text-center">
+      Влияние начального решения
+    </h4>
+    *Local Search, 200 nodes, move choice: first, move types: shift, revert
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h4 class="text-center">
+            Sorted
+          </h4>
+        </div>
+        <div class="col">
+          <h4 class="text-center">
+            Greedy
+          </h4>
+
+        </div>
+        <div class="col">
+          <h4 class="text-center">
+            None
+          </h4>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <img
+             src="static/animation/tsp200sorted.gif"
+             alt="sorted_solution"
+             height="300"
+          />
+        </div>
+        <div class="col">
+          <img
+             src="static/animation/tsp200greedy.gif"
+             alt="greedy_solution"
+             height="300"
+          />
+        </div>
+        <div class="col">
+          <img
+             src="static/animation/tsp200none.gif"
+             alt="none_solution"
+             height="300"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <p>52.2 сек.</p>
+          <p>1853 итерации</p>
+          <p>1152.4 целевая функция</p>
+        </div>
+        <div class="col">
+          <p>11.4 сек.</p>
+          <p>366 итерации</p>
+          <p>1166.9 целевая функция</p>
+        </div>
+        <div class="col">
+          <p>22.06 сек.</p>
+          <p>1962 итерации</p>
+          <p>1218.9 целевая функция</p>
+        </div>
+      </div>
+    </div>
+{% endblock algorithm_description %}
+
+{% block algorithm_parameters%}
+{% endblock algorithm_parameters %}
+
+{% block step_1 %}
+    {% if data["step"] == 1 %}
+        {{ wtf.form_field(form.select_graph, placeholder='select_graph') }}
+        {{ wtf.form_field(form.downloaded_graph, placeholder='downloaded_graph') }}
+        <button type="submit" class="btn btn-primary" name="submit_button" value="graph">Select</button>
+    {% else %}
+        <div class="container">
+            <button type="submit" class="btn btn-outline-danger" name="submit_button" value="reset">
+                reset
+            </button>
+            {{ data['graph name']}}
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+{% block step_2 %}
+    {% if data["step"] == 2 %}
+    <div class="container">
+        <h3>Select algtorithm</h3>
+        <select class="form-select" name="algo" size={{algorithms_info | length}} multiple aria-label="select algorithm">
+            {% for i in range(algorithms_info | length) %}
+                <option value={{i}}>{{ algorithms_info[i]["name"] }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary" name="submit_button" value="algorithm">
+            select
+        </button>
+    </div>
+    {% elif data["step"] > 2 %}
+    <div class="container">
+        <button type="submit" class="btn btn-outline-danger" name="submit_button" value="reset algo">
+                reset
+            </button>
+        {{ algorithms_info[data["algo index"]]["name"] }}
+    </div>
+    {% endif %}
+{% endblock %}
+
+
+{% block step_3 %}
+    {% if data["step"] == 3 %}
+    <div class="container">
+        <h3>Set parameters</h3>
+
+        {% for param in algorithms_info[data["algo index"]]["parameters"] %}
+            <div class="input-group mb-3">
+              <span class="input-group-text">{{ param["name"] }}</span>
+              <input type="text" class="form-control" name="{{ param['name'] }}"
+                placeholder="{% for val in param["values"] %}{{ val[0] }}, {% endfor %}">
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary" name="submit_button" value="params">
+            set
+        </button>
+    </div>
+    {% elif data["step"] > 3 %}
+    <div class="container">
+        <button type="submit" class="btn btn-outline-danger" name="submit_button" value="reset params">
+                reset
+            </button>
+        {{ data["params"] }}
+    </div>
+    {% endif %}
+{% endblock %}
+
+
+{% block final_step %}
+  {% if data["step"] == data["max step"] %}
+  <p> </p>
+  <div class="container">
+      <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="input-group">
+          <div class="input-group-text">step</div>
+          <input type="text" class="form-control" name="step size" placeholder="{{ data['step size'] }}">
+        </div>
+        <div class="btn-group me-2" role="group" aria-label="First group">
+          <button type="submit" class="btn btn-outline-secondary" name="submit_button" value="prev"><</button>
+          <button type="submit" class="btn btn-outline-secondary" name="submit_button" value="next">></button>
+          <button type="submit" class="btn btn-primary" name="submit_button" value="animation">Animate!</button>
+        </div>
+      </div>
+  </div>
+
+  <p> </p>
+  <div class="container">
+      {% for key, value in data["info"].items() %}
+          <div class="row">
+              <div class="col col-lg-2">
+                {{ key }}
+              </div>
+              <div class="col">
+                {{ value }}
+              </div>
+          </div>
+      {% endfor %}
+  </div>
+
+  {% endif %}
+{% endblock %}
+
+{% block image %}
+    {% if data["step"] == data["max step"] %}
+          {% if animateQ %}
+          <img
+                 src="{{ url_for('tsp_anim', step=data["step size"]) }}"
+                 alt="TSP route"
+                 height="450"
+              />
+          {% else %}
+          <img
+                 src="{{ url_for('tsp_img', iteration=data["solver"].algo.iterations) }}"
+                 alt="TSP route"
+                 height="450"
+              />
+          {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block script %}{% endblock %}

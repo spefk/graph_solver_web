@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Как начать работу с РешаторомГрафов3000?</h1>
+    <h2>Алгоритм действий:</h2>
+    <div>
+      <li>1. Загрузите граф в установленной форме (см. ниже) через ваш профиль.</li>
+      <li>2. Выберите требуемую задачу в меню сверху.</li>
+      <li>3. Выберите параметры и запустите алгоритм.</li>
+      <p>Далее, в зависимости от задачи, вам будет выдан разной степени интерактивности вывод.
+        (в данный момент, для TSP поддерживается отрисовка и анимация, а для MaxFlow и SP 1 на 1 только отрисовка)</p>
+    </div>
+
+    <h2>Поддерживаемый вид файлов</h2>
+    <div>
+      Все файлы, содержащие графы, должны соблюдать данную форму и содержатся в формате <b>.txt</b> или  <b>.csv</b> (для TSP).
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Строка #</th>
+            <th scope="col">Переменная</th>
+            <th scope="col">Описание</th>
+            <th scope="col">Вариант 1</th>
+            <th scope="col">Вариант 2</th>
+            <th scope="col">Вариант 3</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="col">1</th>
+            <th scope="col">data_type</th>
+            <th scope="col">вид, в котором представленны данные</th>
+            <th scope="col">edges</th>
+            <th scope="col">coordinates</th>
+            <th scope="col"> </th>
+          </tr>
+          <tr>
+            <th scope="col">2</th>
+            <th scope="col">graph_type</th>
+            <th scope="col">вид графа</th>
+            <th scope="col">directed</th>
+            <th scope="col">undirected</th>
+            <th scope="col">network</th>
+          </tr>
+          <tr>
+            <th scope="col">3 и больше</th>
+            <th scope="col">data</th>
+            <th scope="col">сами ребра/дуги</th>
+            <th scope="col">v u &lt;weight&gt;</th>
+            <th scope="col">v u &lt;capacity&gt;</th>
+            <th scope="col">coord1 coord2 (in R^2)</th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Пример файла</h3>
+    <a href="../static/graph_examples/network_5.txt" download> network_5.txt</a>
+    <a href="../static/graph_examples/tsp_30.csv"  download> tsp_30.csv</a>
+    <a href="../static/graph_examples/apsp.txt" download> apsp_sample.txt</a>
+
+    <h2>Алгоритмы и поддерживаемые типы</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Алгоритм</th>
+            <th scope="col">data_type</th>
+            <th scope="col">graph_type</th>
+            <th scope="col">data</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="col">TSP</th>
+            <th scope="col"> * </th>
+            <th scope="col"> * </th>
+            <th scope="col">coord1;coord2</th>
+          </tr>
+          <tr>
+            <th scope="col">APSP</th>
+            <th scope="col">edges</th>
+            <th scope="col">directed, undirected</th>
+            <th scope="col">u v &lt;weight&gt;</th>
+          </tr>
+          <tr>
+            <th scope="col">MaxFlow</th>
+            <th scope="col">edges</th>
+            <th scope="col">undirected</th>
+            <th scope="col">u v &lt;capcacity&gt;</th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <div class="mx-auto" style="padding-bottom: 100px;">
+  </div>
+
+
+{% endblock content %}

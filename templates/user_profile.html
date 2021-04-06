@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+    <h1> Hello, {{current_user.username}} </h1>
+    <div class="container">
+      {% if message %}
+          <p class="message">{{ message | safe }}</p>
+      {% endif %}
+
+      <h3>Upload Graph</h3>
+        <div class="container">
+            <form enctype="multipart/form-data" action="{{ url_for('user_profile') }}" method="POST">
+                <fieldset>
+                {{ form.hidden_tag() }}
+                {{ wtf.form_field(form.graph_name, placeholder='graph name') }}
+                {{ wtf.form_field(form.graph) }}
+                </fieldset>
+                <button type="submit" class="btn btn-primary">UPLOAD</button>
+            </form>
+        </div>
+
+      <h3> Your Graphs:</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Graph Name</th>
+            <th scope="col">Filename</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for x in graph_list %}
+          <tr>
+            {% for col in x.columns_rerp() %}
+              <td>{{ col }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+{% endblock content %}

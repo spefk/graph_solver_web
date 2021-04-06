@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    {% block algorithm_name %} {% endblock %}
+
+    <nav>
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-link" id="nav-description-tab" data-bs-toggle="tab"
+           href="#nav-description" role="tab" aria-controls="nav-description" aria-selected="false">Описание</a>
+        <a class="nav-link" id="nav-parameters-tab" data-bs-toggle="tab"
+           href="#nav-parameters" role="tab" aria-controls="nav-parameters" aria-selected="false">Параметры</a>
+        <a class="nav-link active" id="nav-solve-tab" data-bs-toggle="tab"
+           href="#nav-solve" role="tab" aria-controls="nav-solve" aria-selected="true">Решение</a>
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab">
+        {% block algorithm_description%} {% endblock %}
+      </div>
+      <div class="tab-pane fade" id="nav-parameters" role="tabpanel" aria-labelledby="nav-parameters-tab">
+        {% block algorithm_parameters%} {% endblock %}
+        {% for algorithm in algorithms_info %}
+          <h4> {{algorithm["name"]}} </h4>
+          <table class="table table-striped table-hover caption-top">
+              <!-- <caption>Описание алгоритмов и их параметров</caption> -->
+            <thead>
+              <tr>
+                <th scope="col">Парметр</th>
+                <th scope="col">Описание</th>
+                <th scope="col">Возможные значения</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for param in algorithm["parameters"] %}
+              <tr>
+                <th scope="row"><b>{{ param["name"] }}</b></th>
+                <td>{{ param["description"] }}</td>
+                <td>
+                  {% for value in param["values"] %}
+                  <p><b>{{ value[0] }}</b>{{ value[1] }}</p>
+                  {% endfor %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endfor %}
+      </div>
+      <div class="tab-pane fade show active" id="nav-solve" role="tabpanel" aria-labelledby="nav-solve-tab">
+
+      <div class="container">
+        <div class="row">
+            <div class="col">
+
+              <div class="container">
+                  <form enctype="multipart/form-data"  method="POST">
+                      <fieldset>
+                      {{ form.hidden_tag() }}
+                      {% block step_1 %}{% endblock %}
+
+                      {% block step_2 %}{% endblock %}
+
+                      {% block step_3 %}{% endblock %}
+
+                      {% block final_step %}{% endblock %}
+
+                      </fieldset>
+                  </form>
+              </div>
+            </div>
+            <div class="col col-lg-5">
+                {% block image %}{% endblock %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src=https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js></script>
+  {% block script %}{% endblock %}
+
+{% endblock content %}
+

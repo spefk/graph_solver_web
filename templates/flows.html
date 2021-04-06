@@ -1,0 +1,121 @@
+{% extends "algorithm_page.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block algorithm_name %}
+    <h1 class="text-center">
+      Maximal Flow
+    </h1>
+{% endblock algorithm_name %}
+
+
+{% block algorithm_description%}
+    <p><b>Maximal Flow Problem</b> - задача нахождения потока максимальной величины, при заданных источнике (source), стоке (sink) и пропускных способностях дуг (capacity).</p>
+    <p>Данная задача является классической, и на практике часто решается при проектировании физических и коммуникационных систем.</p>
+{% endblock algorithm_description %}
+
+
+{% block algorithm_parameters%}
+{% endblock algorithm_parameters %}
+
+
+{% block step_1 %}
+  {% if not image_case %}
+    {{ wtf.form_field(form.select_graph, placeholder='select graph') }}
+    {{ wtf.form_field(form.algorithm, placeholder='select algorithm') }}
+  <div id='graph_forms' >
+    <button id='btn_graph' type="button" class="btn btn-primary" >Next</button>
+  </div>
+  {% endif %}
+{% endblock %}
+
+
+{% block step_2 %}
+  {% if not image_case %}
+    <div id='parameters_form' hidden>
+      {{ wtf.form_field(form.s, placeholder='source vertex') }}
+      {{ wtf.form_field(form.t, placeholder='sink vertex') }}
+      <button id='btn_fin_prev' type="button" class="btn btn-primary">Prev</button>
+      <button id='btn_submit' type="submit" class="btn btn-primary" name="submit_button"
+              value="algorithm">Submit</button>
+    </div>
+  {% endif %}
+{% endblock %}
+
+
+{% block step_3 %}
+{% endblock %}
+
+
+{% block final_step %}
+  {% if image_case %}
+    <div class="container">
+      <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="input-group">
+          <div class="input-group-text">step</div>
+          <input type="text" class="form-control" name="step size" value="{{ data['step size'] }}">
+        </div>
+        <div class="btn-group me-2" role="group" aria-label="First group">
+          <button type="submit" class="btn btn-outline-secondary"
+                  name="submit_button" value="prev"
+                  {% if data['step'] <= 0 %} disabled {% endif %}>&lt;</button>
+          <button type="submit" class="btn btn-outline-secondary"
+                  name="submit_button" value="next"
+                  {% if data['step'] >= data['solver'].solutions | length - 1 %} disabled {% endif %}>&gt;</button>
+{#          <button type="submit" class="btn btn-primary" name="submit_button" value="animation">Animate!</button>#}
+        </div>
+        <div class="btn-group me-2" role="group" aria-label="First group">
+          <a href={{ url_for('flows') }}>
+            <button type="button" class="btn btn-primary" value="restart">Reset</button>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <ul> Максимальный поток: {{ data['solver'].network.flow }} </ul>
+      <ul> Шаг на картинке: {{ data['step'] }} из {{ data['solver'].solutions | length - 1 }} </ul>
+      <ul> Поток на картинке: {{ data['solver'].solutions_value[data['step']] }} </ul>
+    </div>
+  {% endif %}
+{% endblock %}
+
+
+{% block image %}
+  {% if image_case %}
+    <img
+           src="{{ url_for('flows_img', it=data['step']) }}"
+           alt="Current flow"
+           height="450"
+        />
+  {% endif %}
+{% endblock %}
+
+
+{% block script %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+    graph_forms     = document.getElementById("graph_forms")
+    parameters_form = document.getElementById("parameters_form")
+    graph           = document.getElementById('select_graph');
+    algorithm       = document.getElementById('algorithm');
+
+    $(document).ready(function(){
+      $("#btn_graph").click(function(){
+        if (algorithm.value !== '...')
+        {
+              graph_forms.hidden = true;
+            if (algorithm.value === 'ff')
+            {
+                parameters_form.hidden = false;
+            }
+        }
+      });
+      $("#btn_fin_prev").click(function(){
+        graph_forms.hidden = false;
+        parameters_form.hidden = true;
+      });
+
+    });
+  </script>
+
+{% endblock %}

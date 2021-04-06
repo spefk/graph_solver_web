@@ -1,0 +1,14 @@
+<data_type>         # contains type of data   :   edges     |   coordinates    |
+<graph_type>        # contains graph type     :   directed  |   undirected     |  network
+<data>..
+
+
+coordinates
+directed
+coord1 coord2
+...
+
+edges
+undirected
+u1 v1 w1
+...

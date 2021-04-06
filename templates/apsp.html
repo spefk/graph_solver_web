@@ -1,0 +1,158 @@
+{% extends "algorithm_page.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block algorithm_name %}
+    <h1 class="text-center">
+      All Pairs Shortest Paths
+    </h1>
+{% endblock algorithm_name %}
+
+
+{% block algorithm_description%}
+    <p><b>APSP</b> (All Pairs Shortest Paths) — задача поиска в графе кратчайших путей от каждой вершины до каждой другой.</p>
+    <p>Можно также выделить частные случаи (подзадачи) данной задачи: нахождение кратчайшего пути между заданной парой вершин, нахождение кратчайшего пути от одной вершины до всех остальных.</p>
+{% endblock algorithm_description %}
+
+
+{% block algorithm_parameters%}
+{% endblock algorithm_parameters %}
+
+
+{% block step_1 %}
+    {{ wtf.form_field(form.select_graph, placeholder='select graph') }}
+    {{ wtf.form_field(form.algorithm_mode, placeholder='select algorithm') }}
+  <div id='graph_forms' >
+    <button id='btn_graph' type="button" class="btn btn-primary" >Next</button>
+  </div>
+{% endblock %}
+
+
+{% block step_2 %}
+  <div id='parameters_form_s' hidden>
+    {{ wtf.form_field(form.s, placeholder='source vertex') }}
+  </div>
+
+  <div id='parameters_form_t' hidden>
+    {{ wtf.form_field(form.t, placeholder='sink vertex') }}
+  </div>
+
+  <div id='buttons_fin' hidden>
+    <button id='btn_fin_prev' type="button" class="btn btn-primary">Prev</button>
+    <button id='btn_submit' type="submit" class="btn btn-primary" name="submit_button"
+            value="algorithm">Submit</button>
+  </div>
+{% endblock %}
+
+
+{% block step_3 %}
+  {% if image_case == '1_to_1' %}
+    <div>
+      <ul> Кратчайшее расстояние от {{ form.s.data }} до {{ form.t.data }} = {{ distance }}. </ul>
+    </div>
+  {% endif %}
+
+{% endblock %}
+
+
+{% block buttons %}
+{% endblock %}
+
+
+{% block image %}
+  {% if image_case %}
+      <img
+         src="{{ url_for('apsp_img') }}"
+         alt="Result"
+         height="450"
+      />
+    {% if image_case == '1_to_1' %}
+
+    {% elif image_case == '1_to_all' %}
+        <table class="table">
+          <thead>
+            <tr>
+              {% for x in vert_names %}
+                  <th scope="col">{{ x }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              {% for line in solution %}
+                  <td>{{ line }}</td>
+              {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+    {% elif image_case == 'all_to_all' %}
+        <table class="table">
+          <thead>
+            <tr>
+                {% for x in vert_names %}
+                  <th scope="col">{{ x }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for line in solution %}
+              <tr>
+                {% for x in line %}
+                  <td>{{ x }}</td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+
+{% block script %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+    graph_forms         = document.getElementById("graph_forms");
+    parameters_form_t   = document.getElementById("parameters_form_t");
+    parameters_form_s   = document.getElementById("parameters_form_s");
+    buttons_fin         = document.getElementById("buttons_fin");
+
+    select_graph = document.getElementById('select_graph');
+    algorithm_mode = document.getElementById('algorithm_mode');
+
+    $(document).ready(function(){
+
+      algorithm_mode.onchange = function ()
+      {
+        $("#btn_fin_prev").click()
+      }
+
+      $("#btn_graph").click(function(){
+        if (algorithm_mode.value !== '...')
+        {
+            graph_forms.hidden = true;
+            if (algorithm_mode.value === '1_to_1')
+            {
+                parameters_form_s.hidden = false;
+                parameters_form_t.hidden = false;
+            }
+            else if (algorithm_mode.value === '1_to_all')
+            {
+                parameters_form_s.hidden = false;
+            }
+            else if (algorithm_mode.value === 'all_to_all')
+            {
+            }
+            buttons_fin.hidden = false;
+        }
+      });
+      $("#btn_fin_prev").click(function(){
+        graph_forms.hidden = false;
+        buttons_fin.hidden = true;
+        parameters_form_s.hidden = true;
+        parameters_form_t.hidden = true;
+      });
+    });
+  </script>
+
+{% endblock %}

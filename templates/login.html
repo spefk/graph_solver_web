@@ -1,0 +1,20 @@
+{% extends "login_page_layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+    <h1>Login</h1>
+    <div class="container">
+        {% if message %}
+            <p class="message">{{ message | safe }}</p>
+        {% endif %}
+        <form action="/login" method="POST">
+            <fieldset>
+            {{ form.hidden_tag() }}
+            {{ wtf.form_field(form.username, placeholder='username') }}
+            {{ wtf.form_field(form.password, placeholder='password') }}
+            {{ wtf.form_field(form.remember) }}
+            </fieldset>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+{% endblock content %}

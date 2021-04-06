@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Вас приветствует РешаторГрафов3000!</h1>
+    <div class="container">
+        {% if message %}
+            <p class="message">{{ message | safe }}</p>
+        {% endif %}
+    </div>
+    <h5>
+      Здесь можно найти полезную информацию (и файлы-примеры графов):  <a href="{{ url_for('help_page') }}">help</a>.
+    </h5>
+{% endblock content %}
